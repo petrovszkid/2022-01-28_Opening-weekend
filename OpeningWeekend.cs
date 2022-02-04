@@ -5,19 +5,53 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace _2022_01_28_Opening_weekend
+namespace opening_weekend
 {
-    class OpeningWeekend
+    class Film
+    {
+        public string eredeticim { get; set; }
+        public string magyarcim { get; set; }
+        public string bemutato { get; set; }
+        public string forgalmazo { get; set; }
+        public int bevel { get; set; }
+        public int latogato { get; set; }
+
+        public Film(string sor)
+        {
+            string[] t = sor.Split(';');
+            eredeticim = t[0];
+            magyarcim = t[1];
+            bemutato = t[2];
+            forgalmazo = t[3];
+            bevel = int.Parse(t[4]);
+            latogato = int.Parse(t[5]);
+        }
+    }
+    class Program
     {
         static void Main(string[] args)
         {
-            List<Film> filmek = new List<Film>();
-            foreach ( var sor in File.ReadAllLines("nyitohetvege.txt").Skip(1))
+            List<Film> Filmek = new List<Film>();
+
+            string[] adatok = File.ReadAllLines("nyitohetvege.txt");
+            foreach (var sor in adatok.Skip(1))
             {
-                filmek.Add(new Film(sor));
+                Film F = new Film(sor);
+                Filmek.Add(F);
             }
 
-            Console.WriteLine($"3.feladat: Filmek száma az állományban: {filmek.Count()} db"); ;
+            Console.WriteLine($"3.feladat: Filmek száma az állományban: {Filmek.Count} db");
+
+            int Osszbevetel = 0;
+            foreach (var f in Filmek)
+            {
+                if (f.forgalmazo == "UIP")
+                {
+                    //Osszbevetel = Osszbevetel + f.bevel;
+                    Osszbevetel += f.bevel;
+                }
+            }
+            Console.WriteLine($"4.feladat: UIP Duna Film forgalmazó 1. hetes bevételeinek összege: {Osszbevetel} Ft");
 
             Console.ReadKey();
         }
